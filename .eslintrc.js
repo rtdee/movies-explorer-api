@@ -4,7 +4,7 @@ module.exports = {
     commonjs: true,
     es2021: true,
   },
-  extends: ['airbnb-base', 'plugin:import/bcrypt'],
+  extends: 'airbnb-base',
   overrides: [
     {
       env: {
@@ -20,9 +20,8 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module',
   },
   rules: {
-    'no-underscore-dangle': 'off',
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
   },
 };

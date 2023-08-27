@@ -1,49 +1,51 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+// const validator = require('validator');
+const responses = require('../utils/responses');
+const { regexURL } = require('../utils/regexURL');
 
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
   },
   director: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
   },
   duration: {
     type: Number,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
   },
   year: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
   },
   description: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
   },
   image: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
     validate: {
-      validator: (v) => validator.isUrl(v),
-      message: 'Некорректный URL',
+      validator: (v) => regexURL.test(v),
+      message: responses.badURL,
     },
   },
   trailerLink: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
     validate: {
-      validator: (v) => validator.isUrl(v),
-      message: 'Некорректный URL',
+      validator: (v) => regexURL.test(v),
+      message: responses.badURL,
     },
   },
   thumbnail: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
     validate: {
-      validator: (v) => validator.isUrl(v),
-      message: 'Некорректный URL',
+      validator: (v) => regexURL.test(v),
+      message: responses.badURL,
     },
   },
   owner: {
@@ -57,11 +59,11 @@ const movieSchema = new mongoose.Schema({
   },
   nameRU: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
   },
   nameEN: {
     type: String,
-    required: [true, 'Поле обязательно к заполнению'],
+    required: [true, responses.reqField],
   },
 }, { versionKey: false });
 

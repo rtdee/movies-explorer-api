@@ -1,19 +1,28 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
-const UnauthorizedError = require('../errors/unauthorized');
+const NotFoundError = require('../errors/not-found');
+const BadRequestError = require('../errors/bad-request');
+const responses = require('../utils/responses');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials({ email, password })
+  User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Неверные почта или пароль');
+        throw new NotFoundError(responses.notFound);
       }
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.send(JSON.stringify(token));
+      bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            throw new BadRequestError(responses.badReq);
+          }
+          const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'secretkey', { expiresIn: '7d' });
+          res.send(JSON.stringify(token));
+        });
     })
     .catch(next);
 };
