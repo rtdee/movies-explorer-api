@@ -10,8 +10,6 @@ module.exports.getMovies = (req, res, next) => {
     .then((movies) => movies.forEach((movie) => {
       if (movie.owner.toString() === req.user._id) {
         myMovies.push(movie);
-      } else {
-        throw new NotFoundError(responses.notFound);
       }
     }))
     .then(res.send(myMovies))
@@ -28,7 +26,6 @@ module.exports.postMovie = (req, res, next) => {
     image,
     trailerLink,
     thumbnail,
-    movieId,
     nameRU,
     nameEN,
   } = req.body;
@@ -42,7 +39,6 @@ module.exports.postMovie = (req, res, next) => {
     image,
     trailerLink,
     thumbnail,
-    movieId,
     nameRU,
     nameEN,
     owner: req.user._id,
