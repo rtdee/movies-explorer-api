@@ -5,14 +5,10 @@ const ForbiddenError = require('../errors/forbidden');
 const responses = require('../utils/responses');
 
 module.exports.getMovies = (req, res, next) => {
-  const myMovies = [];
   Movie.find({})
-    .then((movies) => movies.forEach((movie) => {
-      if (movie.owner.toString() === req.user._id) {
-        myMovies.push(movie);
-      }
-    }))
-    .then(res.send(myMovies))
+    .then((movies) => {
+      res.send(movies.filter((movie) => movie.owner.toString() === req.user._id));
+    })
     .catch(next);
 };
 
