@@ -7,12 +7,12 @@ const responses = require('../utils/responses');
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, email,
+    username, email,
   } = req.body;
 
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
-      name, email, password: hash,
+      username, email, password: hash,
     })
       .then((user) => {
         res.status(201).send({ user });
@@ -26,8 +26,8 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.updateUser = (req, res, next) => {
-  const { name, email } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, email })
+  const { username, email } = req.body;
+  User.findByIdAndUpdate(req.user._id, { username, email })
     .then((user) => res.send({ user }))
     .catch((err) => {
       if (err.code === 11000) {
